@@ -15,6 +15,12 @@ blogsRouter.delete('/', ((req: Request, res: Response) => {
 }));
 
 blogsRouter.get('/:id', ((req: Request, res: Response) => {
-    const blog = blogsRepository.findBlogsById(req.params.id);
+    const blog = blogsRepository.findBlogById(req.params.id);
     res.send(blog);
+}));
+
+blogsRouter.post('/', ((req: Request, res: Response) => {
+    const blog = req.body;
+    const newBlog = blogsRepository.createNewBlog(blog);
+    res.status(201).send(newBlog);
 }));

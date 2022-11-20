@@ -23,11 +23,21 @@ export const blogsRepository = {
     getAllBlogs(): blog[]{
         return blogs;
     },
-    findBlogsById(id: string): blog{
+    findBlogById(id: string): blog{
         const blog = blogs.filter(b => b.id === id);
         return blog[0];
     },
     deleteAllBlogs(): void {
         blogs = [];
+    },
+    createNewBlog(b: blog): blog {
+        const newBlog = {
+            id: (new Date().valueOf()).toString(),
+            name: b.name || 'mock',
+            description: b.description || 'mock',
+            websiteUrl: b.websiteUrl || 'mock'
+        };
+        blogs.push(newBlog);
+        return newBlog;
     }
 };
