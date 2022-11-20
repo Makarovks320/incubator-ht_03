@@ -1,4 +1,4 @@
-type blog = {
+export type blog = {
     id: string,
     name: string,
     description: string,
@@ -23,9 +23,9 @@ export const blogsRepository = {
     getAllBlogs(): blog[]{
         return blogs;
     },
-    findBlogById(id: string): blog{
+    findBlogById(id: string): blog | null{
         const blog = blogs.filter(b => b.id === id);
-        return blog[0];
+        return blog ? blog[0] : null;
     },
     deleteAllBlogs(): void {
         blogs = [];

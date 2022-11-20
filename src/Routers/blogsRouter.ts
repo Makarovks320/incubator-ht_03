@@ -1,6 +1,7 @@
 import {Request, Response, Router} from "express";
+import { body } from "express-validator";
 import {blogsRepository} from "../Repositories/blogs-repository";
-
+import {inputValidator} from "../middlewares/inputValidator";
 
 export const blogsRouter = Router();
 
@@ -16,10 +17,18 @@ blogsRouter.delete('/', ((req: Request, res: Response) => {
 
 blogsRouter.get('/:id', ((req: Request, res: Response) => {
     const blog = blogsRepository.findBlogById(req.params.id);
-    res.send(blog);
+    blog ? res.send(blog) : res.status(404).send();
 }));
 
-blogsRouter.post('/', ((req: Request, res: Response) => {
+blogsRouter.post('/',
+    body('name').notEmpty()
+        .withMessage('is empty'),
+    body('name').isString()
+        .withMessage('should be string'),
+    body('name').isLength({ min: 3, max: 50 })
+        .withMessage('min: 3, max: 50'),
+    inputValidator,
+    ((req: Request, res: Response) => {
     const blog = req.body;
     const newBlog = blogsRepository.createNewBlog(blog);
     res.status(201).send(newBlog);
