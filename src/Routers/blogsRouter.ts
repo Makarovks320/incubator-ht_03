@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import { body } from "express-validator";
+import {body} from "express-validator";
 import {blogsRepository} from "../Repositories/blogs-repository";
 import {inputValidator} from "../middlewares/inputValidator";
 
@@ -15,7 +15,11 @@ blogsRouter.delete('/', ((req: Request, res: Response) => {
     res.send(204);
 }));
 
-blogsRouter.get('/:id', ((req: Request, res: Response) => {
+blogsRouter.get('/:id',
+    // param('id').isString()
+    //     .withMessage('should be string'),
+    // inputValidator,
+    ((req: Request, res: Response) => {
     const blog = blogsRepository.findBlogById(req.params.id);
     blog ? res.send(blog) : res.status(404).send();
 }));
