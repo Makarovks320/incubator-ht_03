@@ -43,6 +43,8 @@ blogsRouter.put('/:id',
         .withMessage('should be string'),
     body('name').isLength({ min: 3, max: 50 })
         .withMessage('min: 3, max: 50'),
+    // todo: как убедиться, что параметр :id передан?
+    // param().notEmpty().withMessage('param id is required')
     inputValidator,
     (req: Request, res: Response) => {
     const updatedBlog = blogsRepository.updateBlogById(req.params.id, req.body);
