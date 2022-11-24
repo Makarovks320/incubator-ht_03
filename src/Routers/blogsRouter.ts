@@ -48,5 +48,11 @@ blogsRouter.put('/:id',
     inputValidator,
     (req: Request, res: Response) => {
     const updatedBlog = blogsRepository.updateBlogById(req.params.id, req.body);
-    updatedBlog ? res.send(updatedBlog) : res.status(404).send();
+    updatedBlog ? res.status(204).send() : res.status(404).send();
     });
+
+blogsRouter.delete('/:id',
+    ((req: Request, res: Response) => {
+        const blog = blogsRepository.deleteBlogById(req.params.id);
+        blog ? res.status(204).send() : res.status(404).send();
+    }));

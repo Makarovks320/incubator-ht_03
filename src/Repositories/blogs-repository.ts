@@ -48,7 +48,11 @@ export const blogsRepository = {
         }
         updateBlog(blogToUpdate, b);
         return blogToUpdate;
-
+    },
+    deleteBlogById(id: string): null | void {
+        const blogToDelete = this.findBlogById(id);
+        if (!blogToDelete) return null;
+        blogs = blogs.filter(b => b.id !== id);
     }
 };
 
