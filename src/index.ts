@@ -10,7 +10,7 @@ const jsonParser = express.json();
 app.use(jsonParser);
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('HELLO lolo!');
+    res.send('HELLO! ht_02');
     }
 );
 app.delete('/testing/all-data', ((req, res) => {

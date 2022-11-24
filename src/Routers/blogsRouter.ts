@@ -37,3 +37,14 @@ blogsRouter.post('/',
     const newBlog = blogsRepository.createNewBlog(blog);
     res.status(201).send(newBlog);
 }));
+
+blogsRouter.put('/:id',
+    body('name').isString()
+        .withMessage('should be string'),
+    body('name').isLength({ min: 3, max: 50 })
+        .withMessage('min: 3, max: 50'),
+    inputValidator,
+    (req: Request, res: Response) => {
+    const updatedBlog = blogsRepository.updateBlogById(req.params.id, req.body);
+    updatedBlog ? res.send(updatedBlog) : res.status(404).send();
+    });

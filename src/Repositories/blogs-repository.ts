@@ -1,8 +1,8 @@
 export type blog = {
-    id: string,
-    name: string,
-    description: string,
-    websiteUrl: string
+    id?: string,
+    name?: string,
+    description?: string,
+    websiteUrl?: string
 }
 let blogs: blog[] = [
     {
@@ -39,5 +39,21 @@ export const blogsRepository = {
         };
         blogs.push(newBlog);
         return newBlog;
+    },
+// @ts-ignore todo why????
+    updateBlogById(id: string, b: blog): blog | null {
+        const blogToUpdate = this.findBlogById(id);
+        if (!blogToUpdate) {
+            return null;
+        }
+        updateBlog(blogToUpdate, b);
+        return blogToUpdate;
+
     }
 };
+
+function updateBlog(blog: blog, newData: blog): void {
+    newData.name ? blog.name = newData.name : null;
+    newData.description ? blog.description = newData.description : null;
+    newData.websiteUrl ? blog.websiteUrl = newData.websiteUrl : null;
+}
