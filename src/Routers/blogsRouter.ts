@@ -2,6 +2,7 @@ import {Request, Response, Router} from "express";
 import {body} from "express-validator";
 import {blogsRepository} from "../Repositories/blogs-repository";
 import {inputValidator} from "../middlewares/inputValidator";
+// import {checkIdParam} from "../middlewares/checkIdParam";
 
 export const blogsRouter = Router();
 
@@ -16,9 +17,6 @@ blogsRouter.delete('/', ((req: Request, res: Response) => {
 }));
 
 blogsRouter.get('/:id',
-    // param('id').isString()
-    //     .withMessage('should be string'),
-    // inputValidator,
     ((req: Request, res: Response) => {
     const blog = blogsRepository.findBlogById(req.params.id);
     blog ? res.send(blog) : res.status(404).send();
@@ -45,6 +43,7 @@ blogsRouter.put('/:id',
         .withMessage('min: 3, max: 50'),
     // todo: как убедиться, что параметр :id передан?
     // param().notEmpty().withMessage('param id is required')
+    // checkIdParam, todo: сделал проверку, но она не работает - почему?
     inputValidator,
     (req: Request, res: Response) => {
     const updatedBlog = blogsRepository.updateBlogById(req.params.id, req.body);
