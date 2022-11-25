@@ -2,6 +2,7 @@ import {Request, Response, Router} from "express";
 import {body} from "express-validator";
 import {blogsRepository} from "../Repositories/blogs-repository";
 import {inputValidator} from "../middlewares/inputValidator";
+import {authorization} from "../middlewares/authorization";
 // import {checkIdParam} from "../middlewares/checkIdParam";
 
 export const blogsRouter = Router();
@@ -23,6 +24,7 @@ blogsRouter.get('/:id',
 }));
 
 blogsRouter.post('/',
+    authorization,
     body('name').notEmpty()
         .withMessage('is empty'),
     body('name').isString()
@@ -37,6 +39,7 @@ blogsRouter.post('/',
 }));
 
 blogsRouter.put('/:id',
+    authorization,
     body('name').isString()
         .withMessage('should be string'),
     body('name').isLength({ min: 3, max: 50 })
@@ -51,6 +54,7 @@ blogsRouter.put('/:id',
     });
 
 blogsRouter.delete('/:id',
+    authorization,
     ((req: Request, res: Response) => {
         const blog = blogsRepository.deleteBlogById(req.params.id);
         blog ? res.status(204).send() : res.status(404).send();
