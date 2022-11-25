@@ -2,6 +2,7 @@ import {Request, Response, Router} from "express";
 import {body} from "express-validator";
 import {postsRepository} from "../Repositories/posts-repository";
 import {inputValidator} from "../middlewares/inputValidator";
+import {authorization} from "../middlewares/authorization";
 
 
 export const postsRouter = Router();
@@ -22,6 +23,7 @@ postsRouter.get('/:id', ((req: Request, res: Response) => {
 }));
 
 postsRouter.post('/',
+    authorization,
     body('title').isString().withMessage('should be string'),
     body('shortDescription').isString().withMessage('should be string'),
     body('content').isString().withMessage('should be string'),
@@ -35,6 +37,7 @@ postsRouter.post('/',
     }));
 
 postsRouter.put('/:id',
+    authorization,
     body('title').isString().withMessage('should be string'),
     inputValidator,
     (req: Request, res: Response) => {
@@ -43,6 +46,7 @@ postsRouter.put('/:id',
     });
 
 postsRouter.delete('/:id',
+    authorization,
     ((req: Request, res: Response) => {
         const post = postsRepository.deletePostById(req.params.id);
         post ? res.status(204).send() : res.status(404).send();
