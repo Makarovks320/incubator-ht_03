@@ -24,11 +24,8 @@ postsRouter.get('/:id', ((req: Request, res: Response) => {
 
 postsRouter.post('/',
     authorization,
-    body('title').isString().withMessage('should be string'),
-    body('shortDescription').isString().withMessage('should be string'),
-    body('content').isString().withMessage('should be string'),
-    body('blogId').isString().withMessage('should be string'),
-    body('blogName').isString().withMessage('should be string'),
+    body('name').isLength({max: 15}).withMessage('should be string'),
+    body('websiteUrl').isURL(),
     inputValidator,
     ((req: Request, res: Response) => {
         const post = req.body;
@@ -38,7 +35,8 @@ postsRouter.post('/',
 
 postsRouter.put('/:id',
     authorization,
-    body('title').isString().withMessage('should be string'),
+    body('name').isLength({max: 15}).withMessage('should be string'),
+    body('websiteUrl').isURL(),
     inputValidator,
     (req: Request, res: Response) => {
         const updatedPost = postsRepository.updatePostById(req.params.id, req.body);
