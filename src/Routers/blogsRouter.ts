@@ -25,7 +25,7 @@ blogsRouter.get('/:id',
 
 blogsRouter.post('/',
     authorization,
-    body('name').isLength({max: 15}).withMessage('should be string'),
+    body('name').isLength({max: 15}).withMessage('should be string').not().isEmpty(),
     body('websiteUrl').isURL(),
     inputValidator,
     ((req: Request, res: Response) => {
@@ -36,7 +36,7 @@ blogsRouter.post('/',
 
 blogsRouter.put('/:id',
     authorization,
-    body('name').isLength({max: 15}).withMessage('should be string'),
+    body('name').isLength({max: 15}).withMessage('should be string').not().isEmpty(),
     body('websiteUrl').isURL(),
     // todo: как убедиться, что параметр :id передан?
     // param().notEmpty().withMessage('param id is required')

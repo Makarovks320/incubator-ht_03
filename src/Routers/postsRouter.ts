@@ -24,7 +24,7 @@ postsRouter.get('/:id', ((req: Request, res: Response) => {
 
 postsRouter.post('/',
     authorization,
-    body('name').isLength({max: 15}).withMessage('should be string'),
+    body('name').isLength({max: 15}).withMessage('should be string').not().isEmpty(),
     body('websiteUrl').isURL(),
     inputValidator,
     ((req: Request, res: Response) => {
@@ -35,7 +35,7 @@ postsRouter.post('/',
 
 postsRouter.put('/:id',
     authorization,
-    body('name').isLength({max: 15}).withMessage('should be string'),
+    body('name').isLength({max: 15}).withMessage('should be string').not().isEmpty(),
     body('websiteUrl').isURL(),
     inputValidator,
     (req: Request, res: Response) => {
