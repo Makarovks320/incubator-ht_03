@@ -57,10 +57,11 @@ export const postsRepository = {
         updatePost(postToUpdate, p);
         return postToUpdate;
     },
-    deletePostById(id: string): null | void {
+    deletePostById(id: string): null | true {
         const postToDelete = this.findPostById(id);
         if (!postToDelete) return null;
         posts = posts.filter(b => b.id !== id);
+        return true;
     }
 };
 
