@@ -20,6 +20,6 @@ export const inputValidator = (req: Request, res: Response, next: NextFunction) 
         const formattedErrors = array.errors.map(e  => {return {message: e.msg, field: e.param}});// todo спросить у
         // ментора про режим без any
         console.log(array);
-        res.status(400).send({errorMessages: formattedErrors});
+        res.status(400).send({errorsMessages: formattedErrors});
     }
 };
