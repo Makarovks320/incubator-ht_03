@@ -9,7 +9,8 @@ import {blogsRepository} from "../Repositories/blogs-repository";
 // }
 
 export function checkBlogIdExists(value) {
-    if (blogsRepository.findBlogById(value)) {
+    const existId = blogsRepository.findBlogById(value);
+    if (!existId) {
         throw new Error('blog Id not found');
     }
 
