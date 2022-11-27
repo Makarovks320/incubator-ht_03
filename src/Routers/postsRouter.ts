@@ -3,6 +3,7 @@ import {body} from "express-validator";
 import {postsRepository} from "../Repositories/posts-repository";
 import {inputValidator} from "../middlewares/inputValidator";
 import {authorization} from "../middlewares/authorization";
+import {checkBlogIdExists} from "../middlewares/checkBlogIdExists";
 
 
 export const postsRouter = Router();
@@ -25,11 +26,13 @@ postsRouter.get('/:id', ((req: Request, res: Response) => {
 
 postsRouter.post('/',
     authorization,
-    body('title').isLength({max: 30}).withMessage('should be string').not().isEmpty(),
-    body('shortDescription').isLength({max: 100}).withMessage('should be string').not().isEmpty(),
-    body('content').isLength({max: 1000}).withMessage('should be string').not().isEmpty(),
-    body('blogId').isString().withMessage('should be string'),
+    body('title').trim().isLength({max: 30}).withMessage('should be string').not().isEmpty(),
+    body('shortDescription').trim().isLength({max: 100}).withMessage('should be string').not().isEmpty(),
+    body('content').trim().isLength({max: 1000}).withMessage('should be string').not().isEmpty(),
+    body('blogId').trim().isString().custom(checkBlogIdExists).withMessage('should be string'),
     inputValidator,
+    // проверка на существование blogId
+    // checkBlogIdExists,
     ((req: Request, res: Response) => {
         const post = req.body;
         const newPost = postsRepository.createNewPost(post);
@@ -38,10 +41,10 @@ postsRouter.post('/',
 
 postsRouter.put('/:id',
     authorization,
-    body('title').isLength({max: 30}).withMessage('should be string').not().isEmpty(),
-    body('shortDescription').isLength({max: 100}).withMessage('should be string').not().isEmpty(),
-    body('content').isLength({max: 1000}).withMessage('should be string').not().isEmpty(),
-    body('blogId').isString().withMessage('should be string'),
+    body('title').trim().isLength({max: 30}).withMessage('should be string').not().isEmpty(),
+    body('shortDescription').trim().isLength({max: 100}).withMessage('should be string').not().isEmpty(),
+    body('content').trim().isLength({max: 1000}).withMessage('should be string').not().isEmpty(),
+    body('blogId').trim().isString().custom(checkBlogIdExists).withMessage('should be string'),
     inputValidator,
     (req: Request, res: Response) => {
         const updatedPost = postsRepository.updatePostById(req.params.id, req.body);
