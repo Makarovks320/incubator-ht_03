@@ -19,7 +19,8 @@ postsRouter.delete('/', ((req: Request, res: Response) => {
 
 postsRouter.get('/:id', ((req: Request, res: Response) => {
     const post = postsRepository.findPostById(req.params.id);
-    res.send(post);
+    post ? res.send(post) :
+        res.status(404).send();
 }));
 
 postsRouter.post('/',
