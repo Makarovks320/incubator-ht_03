@@ -24,8 +24,10 @@ postsRouter.get('/:id', ((req: Request, res: Response) => {
 
 postsRouter.post('/',
     authorization,
-    body('name').isLength({max: 15}).withMessage('should be string').not().isEmpty(),
-    body('websiteUrl').isURL(),
+    body('title').isLength({max: 30}).withMessage('should be string').not().isEmpty(),
+    body('shortDescription').isLength({max: 100}).withMessage('should be string').not().isEmpty(),
+    body('content').isLength({max: 1000}).withMessage('should be string').not().isEmpty(),
+    body('blogId').isString().withMessage('should be string'),
     inputValidator,
     ((req: Request, res: Response) => {
         const post = req.body;
@@ -35,8 +37,10 @@ postsRouter.post('/',
 
 postsRouter.put('/:id',
     authorization,
-    body('name').isLength({max: 15}).withMessage('should be string').not().isEmpty(),
-    body('websiteUrl').isURL(),
+    body('title').isLength({max: 30}).withMessage('should be string').not().isEmpty(),
+    body('shortDescription').isLength({max: 100}).withMessage('should be string').not().isEmpty(),
+    body('content').isLength({max: 1000}).withMessage('should be string').not().isEmpty(),
+    body('blogId').isString().withMessage('should be string'),
     inputValidator,
     (req: Request, res: Response) => {
         const updatedPost = postsRepository.updatePostById(req.params.id, req.body);
