@@ -25,8 +25,8 @@ blogsRouter.get('/:id',
 
 blogsRouter.post('/',
     authorization,
-    body('websiteUrl').isURL(),
-    body('name').isLength({max: 15}).withMessage('should be string').not().isEmpty(),
+    body('websiteUrl').trim().isURL(),
+    body('name').trim().isLength({max: 15}).withMessage('should be string').not().isEmpty(),
     inputValidator,
     ((req: Request, res: Response) => {
         const blog = req.body;
@@ -36,8 +36,8 @@ blogsRouter.post('/',
 
 blogsRouter.put('/:id',
     authorization,
-    body('name').isLength({max: 15}).withMessage('should be string').not().isEmpty(),
-    body('websiteUrl').isURL(),
+    body('name').trim().isLength({max: 15}).withMessage('should be string').not().isEmpty(),
+    body('websiteUrl').trim().isURL(),
     // todo: как убедиться, что параметр :id передан?
     // param().notEmpty().withMessage('param id is required')
     // checkIdParam, todo: сделал проверку, но она не работает - почему?
