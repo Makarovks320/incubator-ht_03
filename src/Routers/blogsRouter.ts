@@ -25,8 +25,8 @@ blogsRouter.get('/:id',
 
 blogsRouter.post('/',
     authorization,
-    body('name').isLength({max: 15}).withMessage('should be string').not().isEmpty(),
     body('websiteUrl').isURL(),
+    body('name').isLength({max: 15}).withMessage('should be string').not().isEmpty(),
     inputValidator,
     ((req: Request, res: Response) => {
         const blog = req.body;
