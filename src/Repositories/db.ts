@@ -1,7 +1,12 @@
 import {MongoClient} from 'mongodb'
+import dotenv from 'dotenv'
 
-const mongoUri = process.env.mongoURI || //"mongodb://localhost:27017";
-    "mongodb+srv://admin:U_jq6cHKcWTjz@cluster0.k0fxgjq.mongodb.net/?retryWrites=true&w=majority";
+dotenv.config();
+
+const mongoUri = process.env.MONGO_CLOUD_URL;
+if (!mongoUri) {
+    throw new Error('db url is not passed')
+}
 export const client = new MongoClient(mongoUri);
 
 export async function runDb() {
