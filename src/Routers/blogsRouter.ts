@@ -7,32 +7,31 @@ import {authorization} from "../middlewares/authorization";
 
 export const blogsRouter = Router();
 
-blogsRouter.get('/', ((req: Request, res: Response) => {
-    const blogs = blogsRepository.getAllBlogs();
+blogsRouter.get('/', async (req: Request, res: Response) => {
+    const blogs = await blogsRepository.getAllBlogs();
     res.send(blogs);
-}));
+});
 
-blogsRouter.delete('/', ((req: Request, res: Response) => {
-    blogsRepository.deleteAllBlogs();
+blogsRouter.delete('/', async (req: Request, res: Response) => {
+    await blogsRepository.deleteAllBlogs();
     res.send(204);
-}));
+});
 
-blogsRouter.get('/:id',
-    ((req: Request, res: Response) => {
-        const blog = blogsRepository.findBlogById(req.params.id);
+blogsRouter.get('/:id', async (req: Request, res: Response) => {
+        const blog = await blogsRepository.findBlogById(req.params.id);
         blog ? res.send(blog) : res.status(404).send();
-    }));
+    });
 
 blogsRouter.post('/',
     authorization,
     body('websiteUrl').trim().isURL(),
     body('name').trim().isLength({max: 15}).withMessage('should be string').not().isEmpty(),
     inputValidator,
-    ((req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
         const blog = req.body;
-        const newBlog = blogsRepository.createNewBlog(blog);
+        const newBlog = await blogsRepository.createNewBlog(blog);
         res.status(201).send(newBlog);
-    }));
+    });
 
 blogsRouter.put('/:id',
     authorization,
@@ -42,14 +41,14 @@ blogsRouter.put('/:id',
     // param().notEmpty().withMessage('param id is required')
     // checkIdParam, todo: сделал проверку, но она не работает - почему?
     inputValidator,
-    (req: Request, res: Response) => {
-        const updatedBlog = blogsRepository.updateBlogById(req.params.id, req.body);
+    async (req: Request, res: Response) => {
+        const updatedBlog = await blogsRepository.updateBlogById(req.params.id, req.body);
         updatedBlog ? res.status(204).send() : res.status(404).send();
     });
 
 blogsRouter.delete('/:id',
     authorization,
-    ((req: Request, res: Response) => {
-        const blog = blogsRepository.deleteBlogById(req.params.id);
+    async (req: Request, res: Response) => {
+        const blog = await blogsRepository.deleteBlogById(req.params.id);
         blog ? res.status(204).send() : res.status(404).send();
-    }));
+    });

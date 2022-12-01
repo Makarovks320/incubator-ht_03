@@ -20,17 +20,17 @@ let blogs: blog[] = [
 ];
 
 export const blogsRepository = {
-    getAllBlogs(): blog[]{
+    async getAllBlogs(): Promise<blog[]>{
         return blogs;
     },
-    findBlogById(id: string): blog | null{
+    async findBlogById(id: string): Promise<blog | null>{
         const blog = blogs.filter(b => b.id === id);
         return blog ? blog[0] : null;
     },
-    deleteAllBlogs(): void {
+    async deleteAllBlogs(): Promise<void> {
         blogs = [];
     },
-    createNewBlog(b: blog): blog {
+    async createNewBlog(b: blog): Promise<blog> {
         const newBlog = {
             id: (new Date().valueOf()).toString(),
             name: b.name || 'mock',
@@ -40,17 +40,16 @@ export const blogsRepository = {
         blogs.push(newBlog);
         return newBlog;
     },
-// @ts-ignore todo why????
-    updateBlogById(id: string, b: blog): blog | null {
-        const blogToUpdate = this.findBlogById(id);
+    async updateBlogById(id: string, b: blog): Promise<blog | null> {
+        const blogToUpdate = await this.findBlogById(id);
         if (!blogToUpdate) {
             return null;
         }
         updateBlog(blogToUpdate, b);
         return blogToUpdate;
     },
-    deleteBlogById(id: string): null | true {
-        const blogToDelete = this.findBlogById(id);
+    async deleteBlogById(id: string): Promise<true | null> {
+        const blogToDelete = await this.findBlogById(id);
         if (!blogToDelete) return null;
         blogs = blogs.filter(b => b.id !== id);
         return true;

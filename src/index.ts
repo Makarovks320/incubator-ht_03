@@ -13,11 +13,11 @@ app.get('/', (req: Request, res: Response) => {
     res.send('HELLO! ht_02');
     }
 );
-app.delete('/testing/all-data', ((req, res) => {
-    blogsRepository.deleteAllBlogs();
-    postsRepository.deleteAllPosts();
+app.delete('/testing/all-data', async (req, res) => {
+    await blogsRepository.deleteAllBlogs(); // todo спросить нужно ли два эвэйта
+    await postsRepository.deleteAllPosts();
     res.send(204);
-}));
+});
 app.use('/blogs', blogsRouter);
 app.use('/posts', postsRouter);
 

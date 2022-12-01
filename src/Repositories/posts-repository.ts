@@ -26,17 +26,17 @@ let posts: post[] = [
 ];
 
 export const postsRepository = {
-    getAllPosts(): post[]{
+    async getAllPosts(): Promise<post[]>{
         return posts;
     },
-    findPostById(id: string): post | null{
+    async findPostById(id: string): Promise<post | null>{
         const post = posts.filter(b => b.id === id);
         return post ? post[0] : null;
     },
-    deleteAllPosts(): void {
+    async deleteAllPosts(): Promise<void> {
         posts = [];
     },
-    createNewPost(p: post): post {
+    async createNewPost(p: post): Promise<post> {
         const newPost = {
             id: (new Date().valueOf()).toString(),
             title: p.title || 'mock',
@@ -49,16 +49,16 @@ export const postsRepository = {
         posts.push(newPost);
         return newPost;
     },
-    updatePostById(id: string, p: post): post | null {
-        const postToUpdate = this.findPostById(id);
+    async updatePostById(id: string, p: post): Promise<post | null> {
+        const postToUpdate = await this.findPostById(id);
         if (!postToUpdate) {
             return null;
         }
         updatePost(postToUpdate, p);
         return postToUpdate;
     },
-    deletePostById(id: string): null | true {
-        const postToDelete = this.findPostById(id);
+    async deletePostById(id: string): Promise<null | true> {
+        const postToDelete = await this.findPostById(id);
         if (!postToDelete) return null;
         posts = posts.filter(b => b.id !== id);
         return true;
