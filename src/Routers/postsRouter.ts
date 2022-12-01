@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {body} from "express-validator";
-import {postsRepository} from "../Repositories/posts-repository";
+import {postsRepository} from "../Repositories/posts-db-repository";
 import {inputValidator} from "../middlewares/inputValidator";
 import {authorization} from "../middlewares/authorization";
 import {checkBlogIdExists} from "../middlewares/checkBlogIdExists";
@@ -16,7 +16,7 @@ postsRouter.get('/', async (req: Request, res: Response) => {
 
 postsRouter.delete('/', async (req: Request, res: Response) => {
     await postsRepository.deleteAllPosts();
-    res.send(204);
+    res.sendStatus(204);
 });
 
 postsRouter.get('/:id', async (req: Request, res: Response) => {

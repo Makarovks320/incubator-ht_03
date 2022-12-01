@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {body} from "express-validator";
-import {blogsRepository} from "../Repositories/blogs-repository";
+import {blogsRepository} from "../Repositories/blogs-db-repository";
 import {inputValidator} from "../middlewares/inputValidator";
 import {authorization} from "../middlewares/authorization";
 // import {checkIdParam} from "../middlewares/checkIdParam";
@@ -14,7 +14,7 @@ blogsRouter.get('/', async (req: Request, res: Response) => {
 
 blogsRouter.delete('/', async (req: Request, res: Response) => {
     await blogsRepository.deleteAllBlogs();
-    res.send(204);
+    res.sendStatus(204);
 });
 
 blogsRouter.get('/:id', async (req: Request, res: Response) => {
