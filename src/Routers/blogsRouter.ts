@@ -35,7 +35,7 @@ blogsRouter.post('/',
 
 blogsRouter.put('/:id',
     authorization,
-    body('name').isString().withMessage('string').trim().not().isEmpty().withMessage('empty').isLength({min: 1, max: 15}).withMessage('max length: 15'),
+    body('name').isString().trim().not().isEmpty().isLength({min: 1, max: 15}).withMessage('max length: 15'),
     body('websiteUrl').trim().isURL(),
     // todo: как убедиться, что параметр :id передан?
     // param().notEmpty().withMessage('param id is required')

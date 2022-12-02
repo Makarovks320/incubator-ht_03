@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {postsRepository} from "../Repositories/posts-repository";
+import {postsRepository} from "../Repositories/posts-db-repository";
 
 export async function checkIdFromUri (req: Request, res: Response, next: NextFunction) {
     const id = req.params.id;
