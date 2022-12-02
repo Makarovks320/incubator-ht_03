@@ -14,7 +14,7 @@ export const blogsRepository = {
     },
     async findBlogById(id: string): Promise<blog | null>{
         const blog: blog | null = await client.db("ht_03").collection<blog>(COLLECTION).findOne({id});
-        return blog ? blog[0] : null;
+        return blog ? blog : null;
     },
     async deleteAllBlogs(): Promise<void> {
         const result = await client.db("ht_03").collection<blog>(COLLECTION).deleteMany({});
@@ -25,7 +25,8 @@ export const blogsRepository = {
             id: (new Date().valueOf()).toString(),
             name: b.name || 'mock',
             description: b.description || 'mock',
-            websiteUrl: b.websiteUrl || 'mock'
+            websiteUrl: b.websiteUrl || 'mock',
+            createdAt: (new Date()).toISOString()
         };
         const result = await client.db("ht_03").collection<blog>(COLLECTION).insertOne(newBlog);
         return newBlog;
