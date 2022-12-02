@@ -33,7 +33,7 @@ postsRouter.post('/',
     body('blogId').trim().isString().custom(checkBlogIdExists).withMessage('should be string'),
     inputValidator,
     // проверка на существование blogId
-    // checkBlogIdExists,
+    checkBlogIdExists,
     async (req: Request, res: Response) => {
         const post = req.body;
         const newPost = await postsRepository.createNewPost(post);
