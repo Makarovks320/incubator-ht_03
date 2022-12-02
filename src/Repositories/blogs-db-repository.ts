@@ -15,11 +15,10 @@ export const blogsRepository = {
     },
     async findBlogById(id: string): Promise<blog | null>{
         const blog: blog | null = await blogCollection.findOne({id}, { projection: DEFAULT_PROJECTION});
-        return blog ? blog : null;
+        return blog;
     },
     async deleteAllBlogs(): Promise<void> {
         const result = await blogCollection.deleteMany({});
-        console.log(result);
     },
     async createNewBlog(b: blog): Promise<blog> {
         const newBlog: blog = {

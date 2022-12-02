@@ -17,7 +17,7 @@ export const postsRepository = {
     },
     async findPostById(id: string): Promise<post | null>{
         const post: post | null = await postsCollection.findOne({id},{ projection: DEFAULT_PROJECTION});
-        return post ? post : null;
+        return post;
     },
     async deleteAllPosts(): Promise<void> {
         await postsCollection.deleteMany({});
