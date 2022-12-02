@@ -5,6 +5,7 @@ export type blog = {
     name?: string,
     description?: string,
     websiteUrl?: string,
+    createdAt?: string
 }
 const DEFAULT_PROJECTION = { _id: false };
 
@@ -21,14 +22,14 @@ export const blogsRepository = {
         console.log(result);
     },
     async createNewBlog(b: blog): Promise<blog> {
-        const newBlog = {
+        const newBlog: blog = {
             id: (new Date().valueOf()).toString(),
             name: b.name || 'mock',
             description: b.description || 'mock',
             websiteUrl: b.websiteUrl || 'mock',
             createdAt: (new Date()).toISOString()
         };
-        const result = await blogCollection.insertOne(newBlog);
+        const result = await blogCollection.insertOne({...newBlog});
         return newBlog;
     },
     async updateBlogById(id: string, b: blog): Promise<boolean> {

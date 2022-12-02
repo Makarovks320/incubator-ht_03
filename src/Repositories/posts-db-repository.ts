@@ -6,7 +6,8 @@ type post = {
     shortDescription?: string,
     content?: string,
     blogId?: string,
-    blogName?: string
+    blogName?: string,
+    createdAt?: string
 }
 const DEFAULT_PROJECTION = { _id: false };
 
@@ -22,7 +23,7 @@ export const postsRepository = {
         await postsCollection.deleteMany({});
     },
     async createNewPost(p: post): Promise<post> {
-        const newPost = {
+        const newPost: post = {
             id: (new Date().valueOf()).toString(),
             title: p.title || 'mock',
             shortDescription: p.shortDescription || 'mock',
@@ -31,7 +32,7 @@ export const postsRepository = {
             blogName: p.blogName || 'mock',
             createdAt: (new Date()).toISOString()
         };
-        const result = await postsCollection.insertOne(newPost);
+        const result = await postsCollection.insertOne({...newPost});
         return newPost;
     },
     async updatePostById(id: string, p: post): Promise<boolean> {
