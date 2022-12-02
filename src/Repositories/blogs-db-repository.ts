@@ -13,6 +13,7 @@ export const blogsRepository = {
     async getAllBlogs(): Promise<blog[]>{//todo почему здесь без эвэйта?
         return blogCollection.find({}, { projection: DEFAULT_PROJECTION}).toArray();
     },
+
     async findBlogById(id: string): Promise<blog | null>{
         const blog: blog | null = await blogCollection.findOne({id}, { projection: DEFAULT_PROJECTION});
         return blog ? blog : null;
