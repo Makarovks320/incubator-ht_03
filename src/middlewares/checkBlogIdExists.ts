@@ -1,5 +1,5 @@
 //import {NextFunction, Request, Response} from "express";
-import {blogsRepository} from "../Repositories/blogs-repository";
+import {blogsRepository} from "../Repositories/blogs-db-repository";
 
 // export function checkBlogIdExists(req: Request, res: Response, next: NextFunction) {
 //     const blogId = req.body.blogId;
@@ -8,8 +8,8 @@ import {blogsRepository} from "../Repositories/blogs-repository";
 //         res.status(404).send();
 // }
 
-export function checkBlogIdExists(value) {
-    const existId = blogsRepository.findBlogById(value);
+export async function checkBlogIdExists(value) {
+    const existId = await blogsRepository.findBlogById(value);
     if (!existId) {
         throw new Error('blog Id not found');
     }
