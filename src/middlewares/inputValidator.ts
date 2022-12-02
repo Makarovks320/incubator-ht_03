@@ -12,14 +12,22 @@ import {validationResult} from "express-validator";
 //     location: string
 // }
 export const inputValidator = (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req);
-    if (errors.isEmpty()) {
+    const result = validationResult(req);
+    if (result.isEmpty()) {
         next();
     } else {
-        const array = JSON.parse(JSON.stringify(errors));// todo  спросить у ментора можно ли без этого
-        const formattedErrors = array.errors.map(e  => {return {message: e.msg, field: e.param}});// todo спросить у
-        // ментора про режим без any
-        console.log(array);
-        res.status(400).send({errorsMessages: formattedErrors});
+        const array = JSON.parse(JSON.stringify(result));// todo как сделать без этого
+        const mergedByProperty = array.errors.reduce((result, obj) => ({
+            ...result,
+            [obj.param]: {
+                ...result[obj.param],
+                ...obj
+            }
+        }), {});
+        const errorsMessages: any = [];
+        for (let obj in mergedByProperty) {
+            errorsMessages.push({message: mergedByProperty[obj].msg, field: mergedByProperty[obj].param})
+        }
+        res.status(400).send({errorsMessages: errorsMessages});
     }
 };
