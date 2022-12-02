@@ -30,7 +30,7 @@ export const postsRepository = {
             content: p.content || 'mock',
             blogId: p.blogId || 'mock',
             blogName: p.blogName || 'mock',
-
+            createdAt: (new Date()).toISOString()
         };
         const result = await client.db("ht_03").collection<blog>(COLLECTION).insertOne(newPost);
         return newPost;
