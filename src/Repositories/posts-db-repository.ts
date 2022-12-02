@@ -1,5 +1,4 @@
-import {client} from "./db";
-import {blog} from "./blogs-db-repository";
+import {postsCollection} from "./db";
 
 type post = {
     id?: string,
@@ -9,19 +8,18 @@ type post = {
     blogId?: string,
     blogName?: string
 }
-const COLLECTION = "posts";
 const DEFAULT_PROJECTION = { _id: false };
 
 export const postsRepository = {
     async getAllPosts(): Promise<post[]>{
-        return client.db("ht_03").collection<blog>(COLLECTION).find({}, { projection: DEFAULT_PROJECTION}).toArray();
+        return postsCollection.find({}, { projection: DEFAULT_PROJECTION}).toArray();
     },
     async findPostById(id: string): Promise<post | null>{
-        const post: post | null = await client.db("ht_03").collection<blog>(COLLECTION).findOne({id});
+        const post: post | null = await postsCollection.findOne({id});
         return post ? post : null;
     },
     async deleteAllPosts(): Promise<void> {
-        await client.db("ht_03").collection<blog>(COLLECTION).deleteMany({});
+        await postsCollection.deleteMany({});
     },
     async createNewPost(p: post): Promise<post> {
         const newPost = {
@@ -33,15 +31,15 @@ export const postsRepository = {
             blogName: p.blogName || 'mock',
             createdAt: (new Date()).toISOString()
         };
-        const result = await client.db("ht_03").collection<blog>(COLLECTION).insertOne(newPost);
+        const result = await postsCollection.insertOne(newPost);
         return newPost;
     },
     async updatePostById(id: string, p: post): Promise<boolean> {
-        const result = await client.db("ht_03").collection<blog>(COLLECTION).updateOne({id},{$set: {...p}});
+        const result = await postsCollection.updateOne({id},{$set: {...p}});
         return result.matchedCount === 1
     },
     async deletePostById(id: string): Promise<boolean> {
-        const result = await client.db("ht_03").collection<blog>(COLLECTION).deleteOne({id});
+        const result = await postsCollection.deleteOne({id});
         return result.deletedCount === 1
     }
 };

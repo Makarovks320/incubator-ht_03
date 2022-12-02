@@ -1,5 +1,6 @@
 import {MongoClient} from 'mongodb'
 import dotenv from 'dotenv'
+import {blog} from "./blogs-db-repository";
 
 dotenv.config();
 
@@ -7,7 +8,10 @@ const mongoUri = process.env.MONGO_CLOUD_URL;
 if (!mongoUri) {
     throw new Error('db url is not passed')
 }
-export const client = new MongoClient(mongoUri);
+const client = new MongoClient(mongoUri);
+const db = client.db("ht_03");
+export const blogCollection = db.collection<blog>("blogs");
+export const postsCollection = db.collection<blog>("posts");
 
 export async function runDb() {
     try {
