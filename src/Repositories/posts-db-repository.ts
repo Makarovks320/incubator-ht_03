@@ -10,14 +10,15 @@ type post = {
     blogName?: string
 }
 const COLLECTION = "posts";
+const DEFAULT_PROJECTION = { _id: false };
 
 export const postsRepository = {
     async getAllPosts(): Promise<post[]>{
-        return client.db("ht_03").collection<blog>(COLLECTION).find({}).toArray();
+        return client.db("ht_03").collection<blog>(COLLECTION).find({}, { projection: DEFAULT_PROJECTION}).toArray();
     },
     async findPostById(id: string): Promise<post | null>{
         const post: post | null = await client.db("ht_03").collection<blog>(COLLECTION).findOne({id});
-        return post ? post[0] : null;
+        return post ? post : null;
     },
     async deleteAllPosts(): Promise<void> {
         await client.db("ht_03").collection<blog>(COLLECTION).deleteMany({});

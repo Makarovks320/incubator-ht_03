@@ -7,10 +7,11 @@ export type blog = {
     websiteUrl?: string,
 }
 const COLLECTION = "blogs";
+const DEFAULT_PROJECTION = { _id: false };
 
 export const blogsRepository = {
     async getAllBlogs(): Promise<blog[]>{//todo почему здесь без эвэйта?
-        return client.db("ht_03").collection<blog>(COLLECTION).find({}).toArray();
+        return client.db("ht_03").collection<blog>(COLLECTION).find({}, { projection: DEFAULT_PROJECTION}).toArray();
     },
     async findBlogById(id: string): Promise<blog | null>{
         const blog: blog | null = await client.db("ht_03").collection<blog>(COLLECTION).findOne({id});
