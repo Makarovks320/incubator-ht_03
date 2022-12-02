@@ -14,7 +14,7 @@ export const blogsRepository = {
         return blogCollection.find({}, { projection: DEFAULT_PROJECTION}).toArray();
     },
     async findBlogById(id: string): Promise<blog | null>{
-        const blog: blog | null = await blogCollection.findOne({id});
+        const blog: blog | null = await blogCollection.findOne({id}, { projection: DEFAULT_PROJECTION});
         return blog ? blog : null;
     },
     async deleteAllBlogs(): Promise<void> {
