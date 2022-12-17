@@ -4,7 +4,7 @@ import {blog} from "./blogs-db-repository";
 
 dotenv.config();
 
-const mongoUri = process.env.MONGO_CLOUD_URL;
+const mongoUri = process.env.MONGO_LOCAL_URL;
 if (!mongoUri) {
     throw new Error('db url is not passed')
 }

@@ -12,7 +12,7 @@ import {validationResult} from "express-validator";
 //     location: string
 // }
 export const inputValidator = (req: Request, res: Response, next: NextFunction) => {
-    const result = validationResult(req);
+    const result = validationResult(req);// todo как получать разные тексты на разные ошибки
     if (result.isEmpty()) {
         next();
     } else {

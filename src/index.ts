@@ -11,12 +11,11 @@ const jsonParser = express.json();
 app.use(jsonParser);
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('HELLO! ht_02');
+    res.send('HELLO! ht_02-04');
     }
 );
 app.delete('/testing/all-data', async (req, res) => {
-    await blogsRepository.deleteAllBlogs(); // todo спросить нужно ли два эвэйта
-    await postsRepository.deleteAllPosts();
+    await Promise.all([blogsRepository.deleteAllBlogs(), postsRepository.deleteAllPosts()]);
     res.sendStatus(204);
 });
 app.use('/blogs', blogsRouter);

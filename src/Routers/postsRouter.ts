@@ -27,10 +27,12 @@ postsRouter.get('/:id', async (req: Request, res: Response) => {
 
 postsRouter.post('/',
     authorization,
-    body('title').trim().isLength({max: 30}).withMessage('should be string').not().isEmpty(),
-    body('shortDescription').trim().isLength({max: 100}).withMessage('should be string').not().isEmpty(),
-    body('content').trim().isLength({max: 1000}).withMessage('should be string').not().isEmpty(),
-    body('blogId').trim().isString().custom(checkBlogIdExists).withMessage('should be string'),
+    body('title').trim().isLength({max: 30}).withMessage('max length: 30').not().isEmpty(),
+    body('shortDescription').trim().isLength({max: 100}).withMessage('max length: 100').not().isEmpty(),
+    body('content').trim().isLength({max: 1000}).withMessage('max length: 1000').not().isEmpty(),
+    body('blogId').trim()
+        .isString().withMessage('should be string')
+        .custom(checkBlogIdExists).withMessage('blog Id not found'),
     inputValidator,
     // проверка на существование blogId
     // checkBlogIdExists,
