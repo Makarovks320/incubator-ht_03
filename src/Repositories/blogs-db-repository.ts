@@ -10,26 +10,22 @@ export type blog = {
 const DEFAULT_PROJECTION = { _id: false };
 
 export const blogsRepository = {
-    async getAllBlogs(): Promise<blog[]>{//todo почему здесь без эвэйта?
-        return blogCollection.find({}, { projection: DEFAULT_PROJECTION}).toArray();
+    async getBlogs(searchNameTerm: string | null | undefined): Promise<blog[]>{//todo почему здесь без эвэйта?
+        const filter: any = {};
+        if (searchNameTerm) {
+            filter.name = {$regex: searchNameTerm};
+        }
+        return blogCollection.find(filter, { projection: DEFAULT_PROJECTION}).toArray();
     },
     async findBlogById(id: string): Promise<blog | null>{
-        const blog: blog | null = await blogCollection.findOne({id}, { projection: DEFAULT_PROJECTION});
-        return blog;
+        return await blogCollection.findOne({id}, { projection: DEFAULT_PROJECTION});
     },
     async deleteAllBlogs(): Promise<void> {
-        const result = await blogCollection.deleteMany({});
+        await blogCollection.deleteMany({});
     },
     async createNewBlog(b: blog): Promise<blog> {
-        const newBlog: blog = {
-            id: (new Date().valueOf()).toString(),
-            name: b.name || 'mock',
-            description: b.description || 'mock',
-            websiteUrl: b.websiteUrl || 'mock',
-            createdAt: (new Date()).toISOString()
-        };
-        const result = await blogCollection.insertOne({...newBlog});
-        return newBlog;
+        await blogCollection.insertOne({...b});
+        return b;
     },
     async updateBlogById(id: string, b: blog): Promise<boolean> {
         const result = await blogCollection.updateOne({id},{$set: {...b}});

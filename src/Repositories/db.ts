@@ -4,7 +4,7 @@ import {blog} from "./blogs-db-repository";
 
 dotenv.config();
 
-const mongoUri = process.env.MONGO_LOCAL_URL;
+const mongoUri = process.env.MONGO_CLOUD_URL;
 if (!mongoUri) {
     throw new Error('db url is not passed')
 }
@@ -18,7 +18,7 @@ export async function runDb() {
         // Use connect method to connect to the server
         await client.connect();
         // Establish and verify connection
-        const db = client.db('ht_03').command({ping: 1});
+        client.db('ht_03').command({ping: 1});
         console.log('Connected successfully to server');
 
     } catch {//todo почему мы не делаем finally после/вместо catch?

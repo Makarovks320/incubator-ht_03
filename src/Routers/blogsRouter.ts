@@ -1,24 +1,23 @@
 import {Request, Response, Router} from "express";
 import {body} from "express-validator";
-import {blogsRepository} from "../Repositories/blogs-db-repository";
 import {inputValidator} from "../middlewares/inputValidator";
 import {authorization} from "../middlewares/authorization";
 // import {checkIdParam} from "../middlewares/checkIdParam";
-
+import {blogsService} from "../domain/blogs-service"
 export const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
-    const blogs = await blogsRepository.getAllBlogs();
+    const blogs = await blogsService.getBlogs(req.query.name?.toString());
     res.send(blogs);
 });
 
 blogsRouter.delete('/', async (req: Request, res: Response) => {
-    await blogsRepository.deleteAllBlogs();
+    await blogsService.deleteAllBlogs();
     res.sendStatus(204);
 });
 
 blogsRouter.get('/:id', async (req: Request, res: Response) => {
-        const blog = await blogsRepository.findBlogById(req.params.id);
+        const blog = await blogsService.findBlogById(req.params.id);
         blog ? res.send(blog) : res.status(404).send();
     });
 
@@ -29,7 +28,7 @@ blogsRouter.post('/',
     inputValidator,
     async (req: Request, res: Response) => {
         const blog = req.body;
-        const newBlog = await blogsRepository.createNewBlog(blog);
+        const newBlog = await blogsService.createNewBlog(blog);
         res.status(201).send(newBlog);
     });
 
@@ -42,13 +41,13 @@ blogsRouter.put('/:id',
     // checkIdParam, todo: сделал проверку, но она не работает - почему?
     inputValidator,
     async (req: Request, res: Response) => {
-        const updatedBlog = await blogsRepository.updateBlogById(req.params.id, req.body);
+        const updatedBlog = await blogsService.updateBlogById(req.params.id, req.body);
         updatedBlog ? res.status(204).send() : res.status(404).send();
     });
 
 blogsRouter.delete('/:id',
     authorization,
     async (req: Request, res: Response) => {
-        const blog = await blogsRepository.deleteBlogById(req.params.id);
+        const blog = await blogsService.deleteBlogById(req.params.id);
         blog ? res.status(204).send() : res.status(404).send();
     });
