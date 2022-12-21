@@ -14,14 +14,14 @@ export type sortedBy = {
 }
 
 export const blogsRepository = {
-    async getBlogs(searchNameTerm: string | undefined,
-                   sortBy: sortedBy): Promise<blog[]>{//todo почему здесь без эвэйта?
+    async getBlogs(searchNameTerm?: string | null,
+                   sortBy?: sortedBy): Promise<blog[]>{//todo почему здесь без эвэйта?
         const filter: any = {};
         if (searchNameTerm) {
             filter.name = {$regex: searchNameTerm};
         }
         const sort = {};
-        sort[sortBy.fieldName] = sortBy.direction === 'asc' ? 1 : -1;
+        if (sortBy) sort[sortBy.fieldName] = sortBy.direction === 'asc' ? 1 : -1;
         return blogCollection.find(filter, { projection: DEFAULT_PROJECTION}).sort(sort).toArray();
     },
     async findBlogById(id: string): Promise<blog | null>{

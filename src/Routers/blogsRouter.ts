@@ -3,11 +3,16 @@ import {body} from "express-validator";
 import {inputValidator} from "../middlewares/inputValidator";
 import {authorization} from "../middlewares/authorization";
 // import {checkIdParam} from "../middlewares/checkIdParam";
-import {blogsService} from "../domain/blogs-service"
+import {blogsService, queryParamsType} from "../domain/blogs-service"
 export const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
-    const blogs = await blogsService.getBlogs(req.query.name?.toString(), req.query.sortBy?.toString() || '', req.query.sortDirection === 'asc' ? 'asc' : 'desc');
+    const queryParams: queryParamsType = {
+        searchNameTerm: req.query.name?.toString() || null,
+        sortBy: req.query.sortBy?.toString() || 'createdAt',
+        sortDirection: req.query.sortDirection === 'asc' ? 'asc' : 'desc'
+    };
+    const blogs = await blogsService.getBlogs(queryParams);
     res.send(blogs);
 });
 

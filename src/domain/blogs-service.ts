@@ -1,4 +1,4 @@
-import {blogsRepository} from "../Repositories/blogs-db-repository";
+import {blogsRepository, sortedBy} from "../Repositories/blogs-db-repository";
 
 export type blog = { // todo хранить тип здесь или лучше в db?
     id?: string,
@@ -7,12 +7,17 @@ export type blog = { // todo хранить тип здесь или лучше 
     websiteUrl?: string,
     createdAt?: string
 }
+export type queryParamsType = {
+    searchNameTerm: string | null,
+    sortBy: string,
+    sortDirection: 'asc' | 'desc'
+}
 
 export const blogsService = {
-    async getBlogs(searchNameTerm: string | undefined,
-                   sortBy: string,
-                   sortDirection: 'asc' | 'desc'): Promise<blog[]>{//todo почему здесь без эвэйта?
-        return blogsRepository.getBlogs(searchNameTerm, {fieldName: sortBy, direction: sortDirection});
+    async getBlogs(queryParams: queryParamsType): Promise<blog[]>{//todo почему здесь без эвэйта?
+        const sortedBy: sortedBy | undefined = {fieldName: queryParams.sortBy || '', direction: queryParams.sortDirection || 'desc'};
+
+        return blogsRepository.getBlogs(queryParams.searchNameTerm, sortedBy);
     },
     async findBlogById(id: string): Promise<blog | null>{
         return await blogsRepository.findBlogById(id);
