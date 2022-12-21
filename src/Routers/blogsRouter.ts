@@ -4,7 +4,7 @@ import {inputValidator} from "../middlewares/inputValidator";
 import {authorization} from "../middlewares/authorization";
 // import {checkIdParam} from "../middlewares/checkIdParam";
 import {blogsService} from "../domain/blogs-service"
-import {blogsQueryRepository, queryParamsType} from "../Repositories/blogsQueryRepository";
+import {blogsQueryRepository, queryParamsType} from "../Repositories/blogs-query-repository";
 export const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
