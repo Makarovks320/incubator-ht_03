@@ -3,6 +3,8 @@ import {blog, DEFAULT_PROJECTION} from "./blogs-db-repository";
 
 export type queryParamsType = {
     searchNameTerm: string | null,
+    pageNumber: number,
+    pageSize: number,
     sortBy: string,
     sortDirection: 'asc' | 'desc'
 }
@@ -21,6 +23,10 @@ export const blogsQueryRepository = {
         }
 
         // todo почему работает без эвэйта?
-        return blogCollection.find(filter, { projection: DEFAULT_PROJECTION}).sort(sort).toArray();
+        return blogCollection.find(filter, { projection: DEFAULT_PROJECTION})
+            .sort(sort)
+            .skip((queryParams.pageNumber - 1) * queryParams.pageSize)
+            .limit(queryParams.pageSize)
+            .toArray();
     }
 };
