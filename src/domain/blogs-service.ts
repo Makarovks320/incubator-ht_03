@@ -9,12 +9,6 @@ export type blog = { // todo хранить тип здесь или лучше 
 }
 
 export const blogsService = {
-    // переехало в blogsQueryRepository
-    // async getBlogs(queryParams: queryParamsType): Promise<blog[]>{//todo почему здесь без эвэйта?
-    //     const sortedBy: sortedBy | undefined = {fieldName: queryParams.sortBy || '', direction: queryParams.sortDirection || 'desc'};
-    //
-    //     return blogsRepository.getBlogs(queryParams.searchNameTerm, sortedBy);
-    // },
     async findBlogById(id: string): Promise<blog | null>{
         return await blogsRepository.findBlogById(id);
     },
