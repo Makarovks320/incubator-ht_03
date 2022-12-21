@@ -9,8 +9,10 @@ export type blog = { // todo хранить тип здесь или лучше 
 }
 
 export const blogsService = {
-    async getBlogs(searchNameTerm: string | null | undefined): Promise<blog[]>{//todo почему здесь без эвэйта?
-        return blogsRepository.getBlogs(searchNameTerm);
+    async getBlogs(searchNameTerm: string | undefined,
+                   sortBy: string,
+                   sortDirection: 'asc' | 'desc'): Promise<blog[]>{//todo почему здесь без эвэйта?
+        return blogsRepository.getBlogs(searchNameTerm, {fieldName: sortBy, direction: sortDirection});
     },
     async findBlogById(id: string): Promise<blog | null>{
         return await blogsRepository.findBlogById(id);

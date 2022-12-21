@@ -7,7 +7,7 @@ import {blogsService} from "../domain/blogs-service"
 export const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
-    const blogs = await blogsService.getBlogs(req.query.name?.toString());
+    const blogs = await blogsService.getBlogs(req.query.name?.toString(), req.query.sortBy?.toString() || '', req.query.sortDirection === 'asc' ? 'asc' : 'desc');
     res.send(blogs);
 });
 
