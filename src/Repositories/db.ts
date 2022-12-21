@@ -1,6 +1,6 @@
 import {MongoClient} from 'mongodb'
 import dotenv from 'dotenv'
-import {blog} from "./blogs-db-repository";
+import {blog} from "./blogs-repository";
 
 dotenv.config();
 

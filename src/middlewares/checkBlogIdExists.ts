@@ -1,5 +1,5 @@
 //import {NextFunction, Request, Response} from "express";
-import {blogsRepository} from "../Repositories/blogs-db-repository";
+import {blogsRepository} from "../Repositories/blogs-repository";
 
 // export function checkBlogIdExists(req: Request, res: Response, next: NextFunction) {
 //     const blogId = req.body.blogId;

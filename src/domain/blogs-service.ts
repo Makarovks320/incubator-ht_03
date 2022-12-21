@@ -1,4 +1,4 @@
-import {blogsRepository} from "../Repositories/blogs-db-repository";
+import {blogsRepository} from "../Repositories/blogs-repository";
 
 export type blog = { // todo хранить тип здесь или лучше в db?
     id?: string,

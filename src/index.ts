@@ -1,8 +1,8 @@
 import express, {Request, Response} from 'express';
 import {blogsRouter} from "./Routers/blogsRouter";
 import {postsRouter} from "./Routers/postsRouter";
-import {blogsRepository} from "./Repositories/blogs-db-repository";
-import {postsRepository} from "./Repositories/posts-db-repository";
+import {blogsRepository} from "./Repositories/blogs-repository";
+import {postsRepository} from "./Repositories/posts-repository";
 import {runDb} from "./Repositories/db";
 
 export const app = express();

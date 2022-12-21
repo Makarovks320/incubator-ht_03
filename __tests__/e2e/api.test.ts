@@ -1,6 +1,6 @@
 import request from 'supertest';
 import {app} from "../../src";
-import {blog} from "../../src/Repositories/blogs-db-repository";
+import {blog} from "../../src/Repositories/blogs-repository";
 
 describe('/blogs', () => {
     beforeAll(async () => {

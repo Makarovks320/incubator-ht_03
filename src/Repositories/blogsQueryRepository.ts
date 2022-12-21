@@ -1,5 +1,5 @@
 import {blogCollection} from "./db";
-import {blog, DEFAULT_PROJECTION} from "./blogs-db-repository";
+import {blog, DEFAULT_PROJECTION} from "./blogs-repository";
 
 export type queryParamsType = {
     searchNameTerm: string | null,
