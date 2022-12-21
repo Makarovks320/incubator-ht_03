@@ -3,7 +3,8 @@ import {body} from "express-validator";
 import {inputValidator} from "../middlewares/inputValidator";
 import {authorization} from "../middlewares/authorization";
 // import {checkIdParam} from "../middlewares/checkIdParam";
-import {blogsService, queryParamsType} from "../domain/blogs-service"
+import {blogsService} from "../domain/blogs-service"
+import {blogsQueryRepository, queryParamsType} from "../Repositories/blogsQueryRepository";
 export const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
@@ -12,7 +13,7 @@ blogsRouter.get('/', async (req: Request, res: Response) => {
         sortBy: req.query.sortBy?.toString() || 'createdAt',
         sortDirection: req.query.sortDirection === 'asc' ? 'asc' : 'desc'
     };
-    const blogs = await blogsService.getBlogs(queryParams);
+    const blogs = await blogsQueryRepository.getBlogs(queryParams);
     res.send(blogs);
 });
 

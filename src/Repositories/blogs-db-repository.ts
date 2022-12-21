@@ -7,7 +7,7 @@ export type blog = {
     websiteUrl?: string,
     createdAt?: string
 }
-const DEFAULT_PROJECTION = { _id: false };
+export const DEFAULT_PROJECTION = { _id: false };
 export type sortedBy = {
     fieldName: string,
     direction: 'asc' | 'desc'
