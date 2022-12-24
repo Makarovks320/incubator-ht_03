@@ -16,24 +16,14 @@ export const postsRepository = {
         return postsCollection.find({}, { projection: DEFAULT_PROJECTION}).toArray();
     },
     async findPostById(id: string): Promise<post | null>{
-        const post: post | null = await postsCollection.findOne({id},{ projection: DEFAULT_PROJECTION});
-        return post;
+        return await postsCollection.findOne({id},{ projection: DEFAULT_PROJECTION});
     },
     async deleteAllPosts(): Promise<void> {
         await postsCollection.deleteMany({});
     },
     async createNewPost(p: post): Promise<post> {
-        const newPost: post = {
-            id: (new Date().valueOf()).toString(),
-            title: p.title || 'mock',
-            shortDescription: p.shortDescription || 'mock',
-            content: p.content || 'mock',
-            blogId: p.blogId || 'mock',
-            blogName: p.blogName || 'mock',
-            createdAt: (new Date()).toISOString()
-        };
-        const result = await postsCollection.insertOne({...newPost});
-        return newPost;
+        await postsCollection.insertOne({...p});
+        return p;// todo здесь мы можем получить ошибку из БД? мб стоит возвращать результат из БД?
     },
     async updatePostById(id: string, p: post): Promise<boolean> {
         const result = await postsCollection.updateOne({id},{$set: {...p}});

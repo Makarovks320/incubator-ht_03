@@ -1,26 +1,26 @@
 import {Request, Response, Router} from "express";
 import {body} from "express-validator";
-import {postsRepository} from "../Repositories/posts-repository";
 import {inputValidator} from "../middlewares/inputValidator";
 import {authorization} from "../middlewares/authorization";
 import {checkBlogIdExists} from "../middlewares/checkBlogIdExists";
 import {checkIdFromUri} from "../middlewares/checkIdFromUri";
+import {postsService} from "../domain/posts-service";
 
 
 export const postsRouter = Router();
 
 postsRouter.get('/', async (req: Request, res: Response) => {
-    const posts = await postsRepository.getAllPosts();
+    const posts = await postsService.getAllPosts();
     res.send(posts);
 });
 
 postsRouter.delete('/', async (req: Request, res: Response) => {
-    await postsRepository.deleteAllPosts();
+    await postsService.deleteAllPosts();
     res.sendStatus(204);
 });
 
 postsRouter.get('/:id', async (req: Request, res: Response) => {
-    const post = await postsRepository.findPostById(req.params.id);
+    const post = await postsService.findPostById(req.params.id);
     post ? res.send(post) :
         res.status(404).send();
 });
@@ -38,7 +38,7 @@ postsRouter.post('/',
     // checkBlogIdExists,
     async (req: Request, res: Response) => {
         const post = req.body;
-        const newPost = await postsRepository.createNewPost(post);
+        const newPost = await postsService.createNewPost(post);
         res.status(201).send(newPost);
     });
 
@@ -51,13 +51,13 @@ postsRouter.put('/:id',
     body('blogId').trim().isString().custom(checkBlogIdExists).withMessage('blog Id not found'),
     inputValidator,
     async (req: Request, res: Response) => {
-        const updatedPost = await postsRepository.updatePostById(req.params.id, req.body);
+        const updatedPost = await postsService.updatePostById(req.params.id, req.body);
         updatedPost ? res.status(204).send() : res.status(404).send();
     });
 
 postsRouter.delete('/:id',
     authorization,
     async (req: Request, res: Response) => {
-        const post = await postsRepository.deletePostById(req.params.id);
+        const post = await postsService.deletePostById(req.params.id);
         post ? res.status(204).send() : res.status(404).send();
     });
