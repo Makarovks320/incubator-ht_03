@@ -1,21 +1,15 @@
-import {blogCollection} from "./db";
+import {postsCollection} from "./db";
 import {blog, DEFAULT_PROJECTION} from "./blogs-repository";
 
-export type blogsQueryParamsType = {
-    searchNameTerm: string | null,
+export type postQueryParamsType = {
     pageNumber: number,
     pageSize: number,
     sortBy: string,
     sortDirection: 'asc' | 'desc'
 }
 
-export const blogsQueryRepository = {
-    async getBlogs(queryParams: blogsQueryParamsType): Promise<blog[]> {
-
-        const filter: any = {};
-        if (queryParams.searchNameTerm) {
-            filter.name = {$regex: queryParams.searchNameTerm};
-        }
+export const postsQueryRepository = {
+    async getPosts(queryParams: postQueryParamsType): Promise<blog[]> {
 
         const sort = {};
         if (queryParams.sortBy) {
@@ -23,7 +17,7 @@ export const blogsQueryRepository = {
         }
 
         // todo почему работает без эвэйта?
-        return blogCollection.find(filter, { projection: DEFAULT_PROJECTION})
+        return postsCollection.find({}, { projection: DEFAULT_PROJECTION})
             .sort(sort)
             .skip((queryParams.pageNumber - 1) * queryParams.pageSize)
             .limit(queryParams.pageSize)

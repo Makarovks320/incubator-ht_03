@@ -5,12 +5,19 @@ import {authorization} from "../middlewares/authorization";
 import {checkBlogIdExists} from "../middlewares/checkBlogIdExists";
 import {checkIdFromUri} from "../middlewares/checkIdFromUri";
 import {postsService} from "../domain/posts-service";
+import {postQueryParamsType, postsQueryRepository} from "../Repositories/posts-query-repository";
 
 
 export const postsRouter = Router();
 
 postsRouter.get('/', async (req: Request, res: Response) => {
-    const posts = await postsService.getAllPosts();
+    const queryParams: postQueryParamsType = {
+        pageNumber: parseInt(req.query.pageNumber as string) || 1,//todo норм? и из чего происходит преобразование?
+        pageSize: parseInt(req.query.pageSize as string) || 10,
+        sortBy: req.query.sortBy?.toString() || 'createdAt',
+        sortDirection: req.query.sortDirection === 'asc' ? 'asc' : 'desc'
+    };
+    const posts = await postsQueryRepository.getPosts(queryParams);
     res.send(posts);
 });
 

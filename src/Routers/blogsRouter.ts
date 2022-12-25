@@ -4,11 +4,11 @@ import {inputValidator} from "../middlewares/inputValidator";
 import {authorization} from "../middlewares/authorization";
 // import {checkIdParam} from "../middlewares/checkIdParam";
 import {blogsService} from "../domain/blogs-service"
-import {blogsQueryRepository, queryParamsType} from "../Repositories/blogs-query-repository";
+import {blogsQueryRepository, blogsQueryParamsType} from "../Repositories/blogs-query-repository";
 export const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
-    const queryParams: queryParamsType = {
+    const queryParams: blogsQueryParamsType = {
         searchNameTerm: req.query.name?.toString() || null,
         pageNumber: parseInt(req.query.pageNumber as string) || 1,//todo норм? и из чего происходит преобразование?
         pageSize: parseInt(req.query.pageSize as string) || 10,
