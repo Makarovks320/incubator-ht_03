@@ -36,7 +36,7 @@ export const blogsQueryRepository = {
             .skip((queryParams.pageNumber - 1) * queryParams.pageSize)
             .limit(queryParams.pageSize)
             .toArray();
-        const totalCount = await blogCollection.count();
+        const totalCount = await blogCollection.find(filter).count();
         return {
             pagesCount: Math.ceil(totalCount / queryParams.pageSize),
             page: queryParams.pageNumber,

@@ -9,7 +9,7 @@ export const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
     const queryParams: blogsQueryParamsType = {
-        searchNameTerm: req.query.name?.toString() || null,
+        searchNameTerm: req.query.searchNameTerm?.toString() || null,
         pageNumber: parseInt(req.query.pageNumber as string) || 1,//todo норм? и из чего происходит преобразование?
         pageSize: parseInt(req.query.pageSize as string) || 10,
         sortBy: req.query.sortBy?.toString() || 'createdAt',
