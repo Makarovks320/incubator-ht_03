@@ -9,8 +9,16 @@ export type blogsQueryParamsType = {
     sortDirection: 'asc' | 'desc'
 }
 
+type blogsOutput = {
+    pagesCount: number,
+    page: number,
+    pageSize: number,
+    totalCount: number,
+    items: blog[]
+}
+
 export const blogsQueryRepository = {
-    async getBlogs(queryParams: blogsQueryParamsType): Promise<blog[]> {
+    async getBlogs(queryParams: blogsQueryParamsType): Promise<blogsOutput> {
 
         const filter: any = {};
         if (queryParams.searchNameTerm) {
@@ -23,10 +31,18 @@ export const blogsQueryRepository = {
         }
 
         // todo почему работает без эвэйта?
-        return blogCollection.find(filter, { projection: DEFAULT_PROJECTION})
+        const res = await blogCollection.find(filter, { projection: DEFAULT_PROJECTION})
             .sort(sort)
             .skip((queryParams.pageNumber - 1) * queryParams.pageSize)
             .limit(queryParams.pageSize)
             .toArray();
+        const totalCount = await blogCollection.count();
+        return {
+            pagesCount: totalCount / queryParams.pageSize,
+            page: queryParams.pageNumber,
+            pageSize: queryParams.pageSize,
+            totalCount: totalCount,
+            items: res
+        }
     }
 };
