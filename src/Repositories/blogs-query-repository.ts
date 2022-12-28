@@ -22,7 +22,7 @@ export const blogsQueryRepository = {
 
         const filter: any = {};
         if (queryParams.searchNameTerm) {
-            filter.name = {$regex: queryParams.searchNameTerm};
+            filter.name = {$regex: queryParams.searchNameTerm, $options: 'i'};
         }
 
         const sort = {};
