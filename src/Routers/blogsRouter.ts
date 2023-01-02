@@ -6,7 +6,6 @@ import {authorization} from "../middlewares/authorization";
 import {blogsService} from "../domain/blogs-service"
 import {blogsQueryRepository, blogsQueryParamsType} from "../Repositories/blogs-query-repository";
 import {postQueryParamsType, postsQueryRepository} from "../Repositories/posts-query-repository";
-import {checkBlogIdExists} from "../middlewares/checkBlogIdExists";
 import {postsService} from "../domain/posts-service";
 export const blogsRouter = Router();
 
@@ -48,9 +47,6 @@ blogsRouter.post('/:id/posts',
     body('title').trim().isLength({max: 30}).withMessage('max length: 30').not().isEmpty(),
     body('shortDescription').trim().isLength({max: 100}).withMessage('max length: 100').not().isEmpty(),
     body('content').trim().isLength({max: 1000}).withMessage('max length: 1000').not().isEmpty(),
-    body('blogId').trim()
-        .isString().withMessage('should be string')
-        .custom(checkBlogIdExists).withMessage('blog Id not found'),
     inputValidator,
     async (req: Request, res: Response) => {
         const blog = await blogsService.findBlogById(req.params.id);
