@@ -33,7 +33,12 @@ blogsRouter.get('/:id/posts', async (req: Request, res: Response) => {
         sortDirection: req.query.sortDirection === 'asc' ? 'asc' : 'desc'
     };
         const blog = await blogsService.findBlogById(req.params.id);
-        blog ? await postsQueryRepository.getPosts(queryParams, req.params.id) : res.status(404).send();
+        if(blog) {
+            const posts = await postsQueryRepository.getPosts(queryParams, req.params.id);
+            res.send(posts);
+        } else {
+            res.status(404).send();
+        }
     });
 
 

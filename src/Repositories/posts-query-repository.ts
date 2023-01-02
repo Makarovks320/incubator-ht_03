@@ -29,7 +29,7 @@ export const postsQueryRepository = {
             filter['blogId'] = blogId;
         }
         // todo почему работает без эвэйта?
-        const res = await postsCollection.find({}, { projection: DEFAULT_PROJECTION})
+        const res = await postsCollection.find(filter, { projection: DEFAULT_PROJECTION})
             .sort(sort)
             .skip((queryParams.pageNumber - 1) * queryParams.pageSize)
             .limit(queryParams.pageSize)
