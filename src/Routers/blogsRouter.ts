@@ -6,6 +6,8 @@ import {authorization} from "../middlewares/authorization";
 import {blogsService} from "../domain/blogs-service"
 import {blogsQueryRepository, blogsQueryParamsType} from "../Repositories/blogs-query-repository";
 import {postQueryParamsType, postsQueryRepository} from "../Repositories/posts-query-repository";
+import {checkBlogIdExists} from "../middlewares/checkBlogIdExists";
+import {postsService} from "../domain/posts-service";
 export const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
@@ -41,6 +43,25 @@ blogsRouter.get('/:id/posts', async (req: Request, res: Response) => {
         }
     });
 
+blogsRouter.post('/:id/posts',
+    authorization,
+    body('title').trim().isLength({max: 30}).withMessage('max length: 30').not().isEmpty(),
+    body('shortDescription').trim().isLength({max: 100}).withMessage('max length: 100').not().isEmpty(),
+    body('content').trim().isLength({max: 1000}).withMessage('max length: 1000').not().isEmpty(),
+    body('blogId').trim()
+        .isString().withMessage('should be string')
+        .custom(checkBlogIdExists).withMessage('blog Id not found'),
+    inputValidator,
+    async (req: Request, res: Response) => {
+        const blog = await blogsService.findBlogById(req.params.id);
+        if(blog) {
+            const post = req.body;
+            const newPost = await postsService.createNewPost(post);
+            res.status(201).send(newPost);
+        } else {
+            res.status(404).send();
+        }
+    });
 
 blogsRouter.get('/:id', async (req: Request, res: Response) => {
         const blog = await blogsService.findBlogById(req.params.id);
