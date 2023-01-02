@@ -1,5 +1,6 @@
 import {postsCollection} from "./db";
-import {blog, DEFAULT_PROJECTION} from "./blogs-repository";
+import {DEFAULT_PROJECTION} from "./blogs-repository";
+import {post} from "./posts-repository";
 
 export type postQueryParamsType = {
     pageNumber: number,
@@ -8,8 +9,15 @@ export type postQueryParamsType = {
     sortDirection: 'asc' | 'desc'
 }
 
+type postsOutput = {
+    pagesCount: number,
+    page: number,
+    pageSize: number,
+    totalCount: number,
+    items: post[]
+}
 export const postsQueryRepository = {
-    async getPosts(queryParams: postQueryParamsType, blogId?): Promise<blog[]> {
+    async getPosts(queryParams: postQueryParamsType, blogId?): Promise<postsOutput> {
 
         const sort = {};
         if (queryParams.sortBy) {
@@ -21,10 +29,19 @@ export const postsQueryRepository = {
             filter['blogId'] = blogId;
         }
         // todo почему работает без эвэйта?
-        return postsCollection.find({}, { projection: DEFAULT_PROJECTION})
+        const res = await postsCollection.find({}, { projection: DEFAULT_PROJECTION})
             .sort(sort)
             .skip((queryParams.pageNumber - 1) * queryParams.pageSize)
             .limit(queryParams.pageSize)
             .toArray();
+
+        const totalCount = await postsCollection.find(filter).count();
+        return {
+            pagesCount: Math.ceil(totalCount / queryParams.pageSize),
+            page: queryParams.pageNumber,
+            pageSize: queryParams.pageSize,
+            totalCount: totalCount,
+            items: res
+        }
     }
 };

@@ -1,6 +1,6 @@
 import {postsCollection} from "./db";
 
-type post = {
+export type post = {
     id?: string,
     title?: string,
     shortDescription?: string,
