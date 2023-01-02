@@ -9,13 +9,17 @@ export type postQueryParamsType = {
 }
 
 export const postsQueryRepository = {
-    async getPosts(queryParams: postQueryParamsType): Promise<blog[]> {
+    async getPosts(queryParams: postQueryParamsType, blogId?): Promise<blog[]> {
 
         const sort = {};
         if (queryParams.sortBy) {
             sort[queryParams.sortBy] = queryParams.sortDirection === 'asc' ? 1 : -1;
         }
 
+        const filter = {};
+        if (blogId) {
+            filter['blogId'] = blogId;
+        }
         // todo почему работает без эвэйта?
         return postsCollection.find({}, { projection: DEFAULT_PROJECTION})
             .sort(sort)

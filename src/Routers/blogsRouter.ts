@@ -5,6 +5,7 @@ import {authorization} from "../middlewares/authorization";
 // import {checkIdParam} from "../middlewares/checkIdParam";
 import {blogsService} from "../domain/blogs-service"
 import {blogsQueryRepository, blogsQueryParamsType} from "../Repositories/blogs-query-repository";
+import {postQueryParamsType, postsQueryRepository} from "../Repositories/posts-query-repository";
 export const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
@@ -23,6 +24,18 @@ blogsRouter.delete('/', async (req: Request, res: Response) => {
     await blogsService.deleteAllBlogs();
     res.sendStatus(204);
 });
+
+blogsRouter.get('/:id/posts', async (req: Request, res: Response) => {
+    const queryParams: postQueryParamsType = {
+        pageNumber: parseInt(req.query.pageNumber as string) || 1,
+        pageSize: parseInt(req.query.pageSize as string) || 10,
+        sortBy: req.query.sortBy?.toString() || 'createdAt',
+        sortDirection: req.query.sortDirection === 'asc' ? 'asc' : 'desc'
+    };
+        const blog = await blogsService.findBlogById(req.params.id);
+        blog ? await postsQueryRepository.getPosts(queryParams, req.params.id) : res.status(404).send();
+    });
+
 
 blogsRouter.get('/:id', async (req: Request, res: Response) => {
         const blog = await blogsService.findBlogById(req.params.id);
