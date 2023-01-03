@@ -20,14 +20,14 @@ export const postsService = {
     async deleteAllPosts(): Promise<void> {
         await postsRepository.deleteAllPosts();
     },
-    async createNewPost(p: post): Promise<post> {
+    async createNewPost(p: post, blogId?): Promise<post> {
         const newPost: post = {
             id: (new Date().valueOf()).toString(),
             title: p.title || 'mock',
             shortDescription: p.shortDescription || 'mock',
             content: p.content || 'mock',
-            blogId: p.blogId || 'mock',
-            blogName: p.blogName || 'mock',
+            blogId: blogId ? blogId : p.blogId,
+            //blogName: p.blogName || 'mock',
             createdAt: (new Date()).toISOString()
         };
         return await postsRepository.createNewPost(newPost);

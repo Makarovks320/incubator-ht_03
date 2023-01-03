@@ -49,10 +49,11 @@ blogsRouter.post('/:id/posts',
     body('content').trim().isLength({max: 1000}).withMessage('max length: 1000').not().isEmpty(),
     inputValidator,
     async (req: Request, res: Response) => {
-        const blog = await blogsService.findBlogById(req.params.id);
+        const blogId = req.params.id;
+        const blog = await blogsService.findBlogById(blogId);
         if(blog) {
             const post = req.body;
-            const newPost = await postsService.createNewPost(post);
+            const newPost = await postsService.createNewPost(post, blogId);
             res.status(201).send(newPost);
         } else {
             res.status(404).send();
