@@ -53,7 +53,7 @@ blogsRouter.post('/:id/posts',
         const blog = await blogsService.findBlogById(blogId);
         if(blog) {
             const post = req.body;
-            const newPost = await postsService.createNewPost(post, blogId);
+            const newPost = await postsService.createNewPost(post, blogId, blog.name);
             res.status(201).send(newPost);
         } else {
             res.status(404).send();
