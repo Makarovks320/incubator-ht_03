@@ -46,7 +46,7 @@ postsRouter.post('/',
     async (req: Request, res: Response) => {
         const post = req.body;
         const blogData = {
-            blogId: req.body.id,
+            blogId: req.body.blogId,
             blogName: req.body.blogName
         };
         const newPost = await postsService.createNewPost(post, blogData);
