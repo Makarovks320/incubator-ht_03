@@ -39,13 +39,17 @@ postsRouter.post('/',
     body('content').trim().isLength({max: 1000}).withMessage('max length: 1000').not().isEmpty(),
     body('blogId').trim()
         .isString().withMessage('should be string')
-        .custom(checkBlogIdExists).withMessage('blog Id not found'),
+        .custom(checkBlogIdExists).withMessage('blog is not found'),
     inputValidator,
     // проверка на существование blogId
     // checkBlogIdExists,
     async (req: Request, res: Response) => {
         const post = req.body;
-        const newPost = await postsService.createNewPost(post);
+        const blogData = {
+            blogId: req.body.id,
+            blogName: req.body.blogName
+        };
+        const newPost = await postsService.createNewPost(post, blogData);
         res.status(201).send(newPost);
     });
 

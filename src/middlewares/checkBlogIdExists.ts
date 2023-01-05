@@ -8,11 +8,12 @@ import {blogsRepository} from "../Repositories/blogs-repository";
 //         res.status(404).send();
 // }
 
-export async function checkBlogIdExists(value) {
-    const existId = await blogsRepository.findBlogById(value);
-    if (!existId) {
-        throw new Error('blog Id not found');
+export async function checkBlogIdExists(value, { req }) {
+    const blog = await blogsRepository.findBlogById(value);
+    if (!blog) {
+        throw new Error('Incorrect blog id: blog is not found');
     }
-
+    // сразу добавляем в реквест имя блога, чтобы потом не обращаться за ним лишний раз в БД
+    req.body.blogName = blog.name;
     return true;
 }
