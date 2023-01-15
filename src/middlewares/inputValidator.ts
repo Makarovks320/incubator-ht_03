@@ -11,22 +11,31 @@ import {validationResult} from "express-validator";
 //     param: string,
 //     location: string
 // }
-export const inputValidator = (req: Request, res: Response, next: NextFunction) => {
-    const result = validationResult(req);// todo как получать разные тексты на разные ошибки
-    if (result.isEmpty()) {
+export const inputValidator =
+    (req: Request, res: Response, next: NextFunction) => {
+    const myValidationResult = validationResult.withDefaults({
+        formatter: error => {
+            return {
+                msg: error.msg,
+                param: error.param
+            };
+        },
+    });
+    const result = myValidationResult(req).array();
+    if (!result.length) {
         next();
     } else {
-        const array = JSON.parse(JSON.stringify(result));// todo как сделать без этого
-        const mergedByProperty = array.errors.reduce((result, obj) => ({
+        const mergedByProperty = result.reduce((result, obj) => ({
             ...result,
             [obj.param]: {
-                ...result[obj.param],
-                ...obj
+                field: obj.param,
+                message: result[obj.param] ? `${result[obj.param].message}; ${obj.msg}` : obj.msg
             }
         }), {});
         const errorsMessages: any = [];
         for (let obj in mergedByProperty) {
-            errorsMessages.push({message: mergedByProperty[obj].msg, field: mergedByProperty[obj].param})
+            //todo: Possible iteration over unexpected members, probably missing hasOwnProperty check
+            errorsMessages.push({message: mergedByProperty[obj].message, field: mergedByProperty[obj].field})
         }
         res.status(400).send({errorsMessages: errorsMessages});
     }
