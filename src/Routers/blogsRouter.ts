@@ -8,13 +8,8 @@ import {postQueryParamsType, postsQueryRepository} from "../Repositories/posts-q
 import {postsService} from "../domain/posts-service";
 import {checkBlogIdExists} from "../middlewares/checkBlogIdExists";
 import {blogExistingValidator} from "../middlewares/blogExistingValidator";
-import {
-    contentValidation,
-    nameValidation,
-    shortDescriptionValidation,
-    titleValidation,
-    websiteUrlValidation
-} from "../middlewares/validations";
+import { nameValidation, websiteUrlValidation } from "../middlewares/blogsValidations";
+import { contentValidation, shortDescriptionValidation, titleValidation } from "../middlewares/postsValidations";
 
 export const blogsRouter = Router();
 
