@@ -1,4 +1,5 @@
 import {body} from "express-validator";
+import {checkBlogIdExists} from "./checkBlogIdExists";
 
 export const titleValidation =  body('title')
     .trim()
@@ -14,3 +15,7 @@ export const contentValidation =  body('content')
     .trim()
     .isLength({max: 1000}).withMessage('max length: 1000')
     .notEmpty().withMessage('should be notEmpty');
+
+export const blogIdValidation = body('blogId').trim()
+    .isString().withMessage('should be string')
+    .custom(checkBlogIdExists).withMessage('blog is not found');

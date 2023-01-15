@@ -1,11 +1,15 @@
 import {Request, Response, Router} from "express";
-import {body} from "express-validator";
 import {inputValidator} from "../middlewares/inputValidator";
 import {authorization} from "../middlewares/authorization";
-import {checkBlogIdExists} from "../middlewares/checkBlogIdExists";
 import {checkIdFromUri} from "../middlewares/checkIdFromUri";
 import {postsService} from "../domain/posts-service";
 import {postQueryParamsType, postsQueryRepository} from "../Repositories/posts-query-repository";
+import {
+    blogIdValidation,
+    contentValidation,
+    shortDescriptionValidation,
+    titleValidation
+} from "../middlewares/postsValidations";
 
 
 export const postsRouter = Router();
@@ -32,17 +36,13 @@ postsRouter.get('/:id', async (req: Request, res: Response) => {
         res.status(404).send();
 });
 
-postsRouter.post('/',
+postsRouter.post('/', [
     authorization,
-    body('title').trim().isLength({max: 30}).withMessage('max length: 30').not().isEmpty(),
-    body('shortDescription').trim().isLength({max: 100}).withMessage('max length: 100').not().isEmpty(),
-    body('content').trim().isLength({max: 1000}).withMessage('max length: 1000').not().isEmpty(),
-    body('blogId').trim()
-        .isString().withMessage('should be string')
-        .custom(checkBlogIdExists).withMessage('blog is not found'),
+    titleValidation,
+    shortDescriptionValidation,
+    contentValidation,
+    blogIdValidation,
     inputValidator,
-    // проверка на существование blogId
-    // checkBlogIdExists,
     async (req: Request, res: Response) => {
         const post = req.body;
         const blogData = {
@@ -51,24 +51,27 @@ postsRouter.post('/',
         };
         const newPost = await postsService.createNewPost(post, blogData);
         res.status(201).send(newPost);
-    });
+    }
+]);
 
-postsRouter.put('/:id',
+postsRouter.put('/:id', [
     authorization,
     checkIdFromUri,
-    body('title').trim().isLength({max: 30}).withMessage('max: 30').not().isEmpty(),
-    body('shortDescription').trim().isLength({max: 100}).withMessage('max: 100').not().isEmpty(),
-    body('content').trim().isLength({max: 1000}).withMessage('max: 1000').not().isEmpty(),
-    body('blogId').trim().isString().custom(checkBlogIdExists).withMessage('blog Id not found'),
+    titleValidation,
+    shortDescriptionValidation,
+    contentValidation,
+    blogIdValidation,
     inputValidator,
     async (req: Request, res: Response) => {
         const updatedPost = await postsService.updatePostById(req.params.id, req.body);
         updatedPost ? res.status(204).send() : res.status(404).send();
-    });
+    }
+]);
 
-postsRouter.delete('/:id',
+postsRouter.delete('/:id', [
     authorization,
     async (req: Request, res: Response) => {
         const post = await postsService.deletePostById(req.params.id);
         post ? res.status(204).send() : res.status(404).send();
-    });
+    }
+]);
